@@ -1,27 +1,35 @@
 import pygame
+from game_variables.GameVariables import GameVariables as gv
 
-pygame.init()
-pygame.display.set_caption("JahrmarktBumm")
-screen = pygame.display.set_mode((640, 480))
 
-running = True
+def main_screen():
+    pygame.init()
+    pygame.display.set_caption("JahrmarktBumm")
+    screen = pygame.display.set_mode((gv.SCREEN_WIDTH, gv.SCREEN_HEIGHT))
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
+    running = True
+    clock = pygame.time.Clock()
+
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
 
-        # Weitere Events abfragen (z.B. Tastatureingaben)
+            # Weitere Events abfragen (z.B. Tastatureingaben)
 
-    # Update der Spiellogik
+        # Update der Spiellogik
 
-    # Neu zeichnen der Grafiken
+        # Neu zeichnen der Grafiken
 
-    # Das Display updaten
-    pygame.display.flip()
+        # Das Display updaten
+        pygame.display.flip()
+        clock.tick(gv.FPS)
 
-# PyGame sauber beenden (cleanup)
-pygame.quit()
+    pygame.quit()
+
+
+if __name__ == "__main__":
+    pass
