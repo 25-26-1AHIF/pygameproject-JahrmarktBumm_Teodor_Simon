@@ -1,7 +1,7 @@
 import pygame
 
 pygame.init()
-pygame.display.set_caption("Hello pygame")
+pygame.display.set_caption("JahrmarktBumm")
 screen = pygame.display.set_mode((640, 480))
 
 running = True
