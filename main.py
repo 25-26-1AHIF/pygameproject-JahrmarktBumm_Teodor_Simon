@@ -22,7 +22,6 @@ def main_screen():
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-
             # Weitere Events abfragen (z.B. Tastatureingaben)
 
         # Update der Spiellogik
