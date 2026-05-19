@@ -1,6 +1,7 @@
 import pygame
 from game_variables.GameVariables import GameVariables as gv
 
+
 def main_screen():
     pygame.init()
     pygame.display.set_caption("JahrmarktBumm")
