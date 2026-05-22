@@ -3,5 +3,5 @@ class GameVariables:
     SCREEN_HEIGHT = 480
     SQUARE_SIZE = 64
     BULLET_SIZE = 4
-    BULLET_SPEED = 5
+    TARGET_SIZE = 32
     FPS = 60
