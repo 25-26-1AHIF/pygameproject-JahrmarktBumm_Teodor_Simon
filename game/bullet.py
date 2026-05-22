@@ -25,7 +25,7 @@ class Bullets:
         self.screen = screen
         self.bullets = []
 
-    def add_rocket(self, bullet):
+    def add_bullet(self, bullet):
         self.bullets.append(bullet)
 
     def update_and_draw(self):

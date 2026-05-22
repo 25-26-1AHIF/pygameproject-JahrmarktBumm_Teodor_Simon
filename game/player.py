@@ -1,16 +1,23 @@
 import pygame
 from game_variables.GameVariables import GameVariables as gv
+from game.bullet import Bullet, Bullets
 
 class Player:
-    def __init__(self, screen: pygame.Surface):
+    def __init__(self, screen: pygame.Surface, bullets: Bullet):
         self.screen = screen
         self.width = gv.SCREEN_WIDTH * 0.08
         self.height = gv.SCREEN_HEIGHT * 0.12
         self.x_pos = gv.SCREEN_WIDTH // 2 - self.width // 2
         self.y_pos = gv.SCREEN_HEIGHT - self.height - 10
+        self.bullets = bullets
 
     def get_rect(self):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
+
+    def shoot(self):
+        mx = self.x_pos + self.width / 2 - gv.BULLET_SIZE / 2
+        my = self.y_pos - gv.BULLET_SIZE
+        self.bullets.(Bullet(self.screen, mx, my, 0, -3))
 
     def update_and_draw(self, frame_counter: int):
         # aus PyGame SpaceShooter aus dem Unterricht
