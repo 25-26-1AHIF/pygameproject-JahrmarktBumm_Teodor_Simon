@@ -2,14 +2,10 @@ import pygame
 from game_variables.GameVariables import GameVariables as gv
 
 
-def start_screen(screen, title_text):
-    pass
-
-
 def main_screen():
     pygame.init()
-    pygame.display.set_caption("JahrmarktBumm")
     screen = pygame.display.set_mode((gv.SCREEN_WIDTH, gv.SCREEN_HEIGHT))
+    pygame.display.set_caption("JahrmarktBumm")
 
     running = True
     clock = pygame.time.Clock()
