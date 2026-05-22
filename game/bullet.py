@@ -1,6 +1,7 @@
 import pygame
 from game_variables.GameVariables import GameVariables as gv
 
+
 class Bullet:
     def __init__(self, screen: pygame.Surface, x_pos: float, y_pos: float, dx: float, dy: float):
         self.screen = screen
@@ -18,6 +19,7 @@ class Bullet:
         self.x_pos += self.dx
         self.y_pos += self.dy
         pygame.draw.rect(self.screen, "#B87333", (self.x_pos, self.y_pos, self.width, self.height))
+
 
 class Bullets:
     def __init__(self, screen: pygame.Surface):

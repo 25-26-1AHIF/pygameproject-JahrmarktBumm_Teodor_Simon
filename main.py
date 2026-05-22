@@ -31,7 +31,6 @@ def main_screen():
                 if event.key == pygame.K_SPACE:
                     player_object.shoot()
 
-
             # Weitere Events abfragen (z.B. Tastatureingaben)
 
         # Update der Spiellogik

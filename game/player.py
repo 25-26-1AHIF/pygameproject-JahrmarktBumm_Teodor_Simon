@@ -2,6 +2,7 @@ import pygame
 from game_variables.GameVariables import GameVariables as gv
 from game.bullet import Bullet, Bullets
 
+
 class Player:
     def __init__(self, screen: pygame.Surface, bullets: Bullets):
         self.screen = screen
