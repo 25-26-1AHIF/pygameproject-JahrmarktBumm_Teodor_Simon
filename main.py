@@ -18,12 +18,6 @@ def main_screen():
     player_object = Player(screen, bullets_manager)
     # KI Ende, Prompt: Die bullet funktioniert nicht bitte sag mir was falsch ist
 
-    # # # KI Google Gemini Anfang
-    # Fehler behoben: Objekt EINMAL vor der Schleife erstellen.
-    # Variable klein schreiben, um Konflikt mit der Klasse 'Player' zu vermeiden.
-    player_object = Player(screen)
-    # # # KI Ende, Prompt: ich kann den Player nicht zeichnen sag mir was falsch ist
-
     running = True
     clock = pygame.time.Clock()
 
