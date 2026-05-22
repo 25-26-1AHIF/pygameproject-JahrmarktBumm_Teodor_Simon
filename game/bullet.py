@@ -1,7 +1,8 @@
 import pygame
 from game_variables.GameVariables import GameVariables as gv
+from game.player import Player as Player
 
-class Rocket:
+class Bullet:
     def __init__(self, screen: pygame.Surface, x_pos: float, y_pos: float, dx: float, dy: float):
         self.screen = screen
         self.x_pos = x_pos
