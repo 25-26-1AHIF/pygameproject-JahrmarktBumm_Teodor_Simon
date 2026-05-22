@@ -4,8 +4,8 @@ from game_variables.GameVariables import GameVariables as gv
 class Player:
     def __init__(self, screen: pygame.Surface):
         self.screen = screen
-        self.width = gv.SCREEN_WIDTH * 0.75
-        self.height = gv.SCREEN_HEIGHT * 0.75
+        self.width = gv.SCREEN_WIDTH * 0.08
+        self.height = gv.SCREEN_HEIGHT * 0.12
         self.x_pos = gv.SCREEN_WIDTH // 2 - self.width // 2
         self.y_pos = gv.SCREEN_HEIGHT - self.height - 10
 
@@ -21,7 +21,7 @@ class Player:
             self.x_pos += 2
         # bis hier her
 
-        # # # KI Google Gemini Anfang
+        # # # KI Google Gemini
         # Fehlende Zeichen-Logik hinzugefügt (zeichnet vorerst ein rotes Rechteck)
         pygame.draw.rect(self.screen, "red", self.get_rect())
         # # # KI Ende, Prompt: ich kann den Player nicht zeichnen sag mir was falsch ist
