@@ -13,11 +13,13 @@ class Player:
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
 
     def update_and_draw(self, frame_counter: int):
+        # aus PyGame SpaceShooter aus dem Unterricht
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and self.x_pos > 0:
             self.x_pos -= 2
         if keys[pygame.K_d] and self.x_pos < gv.SCREEN_WIDTH - self.width:
             self.x_pos += 2
+        # bis hier her
 
         # # # KI Google Gemini Anfang
         # Fehlende Zeichen-Logik hinzugefügt (zeichnet vorerst ein rotes Rechteck)
