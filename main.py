@@ -1,6 +1,8 @@
 import pygame
 from game_variables.GameVariables import GameVariables as gv
 from game.player import Player
+from game.bullet import Bullet
+from game.target import Target
 
 
 def main_screen():
@@ -26,6 +28,9 @@ def main_screen():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                if event.key == pygame.K_SPACE:
+                    pass
+
 
             # Weitere Events abfragen (z.B. Tastatureingaben)
 
