@@ -23,7 +23,7 @@ def main_screen():
         # Update der Spiellogik
 
         # Neu zeichnen der Grafiken
-
+        screen.fill("darkgray")
         # Das Display updaten
         pygame.display.flip()
         clock.tick(gv.FPS)
@@ -32,4 +32,4 @@ def main_screen():
 
 
 if __name__ == "__main__":
-    pass
+    main_screen()
