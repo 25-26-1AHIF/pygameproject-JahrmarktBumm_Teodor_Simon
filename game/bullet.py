@@ -17,7 +17,7 @@ class Bullet:
     def update_and_draw(self):
         self.x_pos += self.dx
         self.y_pos += self.dy
-        pygame.draw.rect(self.screen, "gold", (self.x_pos, self.y_pos, self.width, self.height))
+        pygame.draw.rect(self.screen, "#B87333", (self.x_pos, self.y_pos, self.width, self.height))
 
 class Bullets:
     def __init__(self, screen: pygame.Surface):
