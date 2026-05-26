@@ -2,7 +2,7 @@ import pygame
 from game_variables.GameVariables import GameVariables as gv
 from game.player import Player
 from game.bullet import Bullet, Bullets
-from game.target import Target
+from game.target import Target, Targets
 
 
 def main_screen():
@@ -17,7 +17,7 @@ def main_screen():
     bullets_manager = Bullets(screen)
     player_object = Player(screen, bullets_manager)
     # KI Ende, Prompt: Die bullet funktioniert nicht bitte sag mir was falsch ist
-    target_object = Target(screen)
+    targets_manager = Targets(screen)
 
     running = True
     clock = pygame.time.Clock()
@@ -32,8 +32,6 @@ def main_screen():
                 if event.key == pygame.K_SPACE:
                     player_object.shoot()
 
-            # Weitere Events abfragen (z.B. Tastatureingaben)
-
         # Update der Spiellogik
 
         # Neu zeichnen der Grafiken
@@ -45,7 +43,12 @@ def main_screen():
         bullets_manager.update_and_draw()
         # KI Ende, Prompt: Die bullet funktioniert nicht bitte sag mir was falsch ist
 
-        target_object.update_and_draw()
+        targets_manager.update_and_draw(frame_counter)
+
+        # KI Google Gemini Anfang
+        # Fehler behoben
+        frame_counter += 1
+        # KI Ende, Prompt
 
         # Das Display updaten
         pygame.display.flip()
