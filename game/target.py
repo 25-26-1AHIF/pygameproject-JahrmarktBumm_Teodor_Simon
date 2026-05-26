@@ -6,8 +6,8 @@ class Target:
     def __init__(self, screen: pygame.Surface):
         self.screen = screen
         self.targets = Target
-        self.width = gv.SQUARE_SIZE
-        self.height = gv.SQUARE_SIZE
+        self.width = gv.TARGET_SIZE
+        self.height = gv.TARGET_SIZE
         self.x_pos = gv.SCREEN_WIDTH // 2 - self.width // 2
         self.y_pos = 30
         self.direction = 1
