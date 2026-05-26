@@ -17,6 +17,7 @@ def main_screen():
     bullets_manager = Bullets(screen)
     player_object = Player(screen, bullets_manager)
     # KI Ende, Prompt: Die bullet funktioniert nicht bitte sag mir was falsch ist
+    target_object = Target(screen)
 
     running = True
     clock = pygame.time.Clock()
@@ -43,6 +44,8 @@ def main_screen():
         # Logik hinzugefügt: Kugeln bewegen und auf dem Screen zeichnen
         bullets_manager.update_and_draw()
         # KI Ende, Prompt: Die bullet funktioniert nicht bitte sag mir was falsch ist
+
+        target_object.update_and_draw()
 
         # Das Display updaten
         pygame.display.flip()
