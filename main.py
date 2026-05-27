@@ -4,7 +4,7 @@ from game.player import Player
 from game.bullet import Bullet, Bullets
 from game.target import Target, Targets
 
-
+#mainscreen
 def main_screen():
     pygame.init()
     screen = pygame.display.set_mode((gv.SCREEN_WIDTH, gv.SCREEN_HEIGHT))
