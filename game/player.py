@@ -21,7 +21,7 @@ class Player:
 
         # KI Google Gemini Anfang
         # Logik angepasst: dx ist fix auf 0 gesetzt, damit die Kugel ohne Zufall perfekt gerade nach oben fliegt.
-        self.bullets.add_bullet(Bullet(self.screen, mx, my, 0, -3))
+        self.bullets.add_bullet(Bullet(self.screen, mx, my, 0, -10))
         # KI Ende, Prompt: Die bullet funktioniert nicht bitte sag mir was falsch ist
 
     def update_and_draw(self, frame_counter: int):

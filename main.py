@@ -33,6 +33,16 @@ def main_screen():
                     player_object.shoot()
 
         # Update der Spiellogik
+        # KI Google Gemini Anfang
+        # Logik hinzugefügt: Kollision Bullet mit Target
+        for bullet in bullets_manager.bullets[:]:
+            for target in targets_manager.targets[:]:
+                if bullet.get_rect().colliderect(target.get_rect()):
+                    if bullet in bullets_manager.bullets:
+                        bullets_manager.bullets.remove(bullet)
+                    if target in targets_manager.targets:
+                        targets_manager.targets.remove(target)
+        # KI Ende
 
         # Neu zeichnen der Grafiken
         screen.fill("darkgray")
