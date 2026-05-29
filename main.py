@@ -45,7 +45,7 @@ def main_screen():
         # KI Ende
 
         # Neu zeichnen der Grafiken
-        screen.fill("darkgray")
+        screen.fill("darkgrey")
         player_object.update_and_draw(frame_counter)
 
         # KI Google Gemini Anfang

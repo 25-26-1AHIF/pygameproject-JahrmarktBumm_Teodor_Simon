@@ -10,7 +10,7 @@ class Target:
         self.x_pos = -self.width
         self.y_pos = 50
         self.direction = 1
-        self.speed = 2.5
+        self.speed = 3
 
     def get_rect(self):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
