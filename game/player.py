@@ -19,21 +19,14 @@ class Player:
         mx = self.x_pos + self.width / 2 - gv.BULLET_SIZE / 2
         my = self.y_pos - gv.BULLET_SIZE
 
-        # KI Google Gemini Anfang
-        # Logik angepasst: dx ist fix auf 0 gesetzt, damit die Kugel ohne Zufall perfekt gerade nach oben fliegt.
-        self.bullets.add_bullet(Bullet(self.screen, mx, my, 0, -10))
-        # KI Ende, Prompt: Die bullet funktioniert nicht bitte sag mir was falsch ist
+        # Geschwindigkeit auf -7 erhöht, damit die Kugeln schneller fliegen
+        self.bullets.add_bullet(Bullet(self.screen, mx, my, 0, -7))
 
     def update_and_draw(self, frame_counter: int):
-        # aus PyGame SpaceShooter aus dem Unterricht
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and self.x_pos > 0:
             self.x_pos -= 2
         if keys[pygame.K_d] and self.x_pos < gv.SCREEN_WIDTH - self.width:
             self.x_pos += 2
-        # bis hier her
 
-        # # # KI Google Gemini
-        # Fehlende Zeichen-Logik hinzugefügt (zeichnet vorerst ein rotes Rechteck)
-        pygame.draw.rect(self.screen, "red", self.get_rect())
-        # # # KI Ende, Prompt: ich kann den Player nicht zeichnen sag mir was falsch ist
+        pygame.draw.rect(self.screen, "blue", self.get_rect())

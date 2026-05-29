@@ -10,7 +10,7 @@ class Target:
         self.x_pos = -self.width
         self.y_pos = 50
         self.direction = 1
-        self.speed = 3
+        self.speed = 2.5
 
     def get_rect(self):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
@@ -29,12 +29,14 @@ class Targets:
         self.targets.append(Target(self.screen))
 
     def update_and_draw(self, frame_counter: int):
-        # Gleichmäßiger Spawn-Takt:
-        # Bei 60 FPS bedeutet "frame_counter % 120 == 0" alle 2 Sekunden (120 Frames)
+        # Gleichmäßiger Spawn-Takt: Alle 2 Sekunden (120 Frames bei 60 FPS)
         if frame_counter % 120 == 0:
             self.add_target()
 
         for target in self.targets[:]:
             target.update_and_draw()
+
+            # Ziel löschen, wenn es den rechten Bildschirmrand verlässt
             if target.x_pos > gv.SCREEN_WIDTH:
-                self.targets.remove(target)
+                if target in self.targets:
+                    self.targets.remove(target)
