@@ -14,7 +14,7 @@ def draw_menu(screen, title_text):
     title_rect = title_surface.get_rect(center=(gv.SCREEN_WIDTH // 2, 150))
     screen.blit(title_surface, title_rect)
 
-    # Start-Button
+    # Start
     font_button = pygame.font.SysFont("arial", 32)
     button_text = font_button.render("Starten", True, "white")
     button_rect = pygame.Rect(0, 0, 120, 50)
@@ -31,7 +31,7 @@ def main_screen():
     screen = pygame.display.set_mode((gv.SCREEN_WIDTH, gv.SCREEN_HEIGHT))
     pygame.display.set_caption("JahrmarktBumm")
 
-    # Spiel-Zustände
+    # Zustände
     game_state = "MENU"
     menu_title = "Jahrmarkt Bumm"
     frame_counter = 0
