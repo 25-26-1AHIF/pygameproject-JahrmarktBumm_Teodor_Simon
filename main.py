@@ -70,11 +70,8 @@ def main_screen():
     menu_title = "Jahrmarkt Bumm"
     frame_counter = 0
     score = 0
-
-    # Ki Google Gemini Anfang
-    bullets_left = 10  # Begrenzung auf 10 Schuss
+    bullets_left = 10
     last_shot_time = 0
-    # Ki Ende, Prompt: Neue Variable für limitierte Munition
 
     bullets_manager = Bullets(screen)
     player_object = Player(screen, bullets_manager)
@@ -98,26 +95,32 @@ def main_screen():
                     if current_button_rect.collidepoint(event.pos):
                         game_state = "GAME"
                         frame_counter = 0
-                        score = 0  # Punkte für neues Spiel zurücksetzen
-                        bullets_left = 10  # Munition für neues Spiel auffüllen
+                        score = 0  # Punkte zurücksetzen
+                        bullets_left = 10  # Munition auffüllen
+                        last_shot_time = 0  # Cooldown zurücksetzen
+
+                # Ki Google Gemini Anfang
+                # Wenn im Startmenü ESC gedrückt wird -> Spiel komplett schließen
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                # Ki Ende, Prompt: ESC schliesst das Programm im Menue
 
             # Events im SPIEL
             elif game_state == "GAME":
                 if event.type == pygame.KEYDOWN:
+                    # Wenn im Spiel ESC gedrückt wird -> Zurück zum Startbildschirm
                     if event.key == pygame.K_ESCAPE:
                         game_state = "MENU"
                         menu_title = "Jahrmarkt Bumm"
 
-                    # Ki Google Gemini Anfang
                     if event.key == pygame.K_SPACE:
                         current_time = pygame.time.get_ticks()
-                        # Cooldown prüfen (400ms) UND prüfen, ob noch Schüsse übrig sind
                         if current_time - last_shot_time >= 400:
                             if bullets_left > 0:
                                 player_object.shoot()
-                                bullets_left -= 1  # Einen Schuss abziehen
+                                bullets_left -= 1
                                 last_shot_time = current_time
-                    # Ki Ende, Prompt: Schuss-Limitierung einbauen
 
         if game_state == "MENU":
             current_button_rect = draw_menu(screen, menu_title)
@@ -131,7 +134,7 @@ def main_screen():
                             bullets_manager.bullets.remove(bullet)
                         if target in targets_manager.targets:
                             targets_manager.targets.remove(target)
-                            score += 10  # Punkte vergeben!
+                            score += 10
 
             # Neu zeichnen der Spiel-Grafiken
             screen.fill("darkgray")
@@ -140,32 +143,47 @@ def main_screen():
             targets_manager.update_and_draw(frame_counter)
 
             # Ki Google Gemini Anfang
-            # Timer prüfen (Jetzt auf genau 15 Sekunden eingestellt!)
-            if frame_counter >= gv.FPS * 15:
-                save_highscore(score)  # Score speichern
-                game_state = "MENU"  # Zurück ins Menü
-                frame_counter = 0
+            # --- Visuelle Cooldown-Leiste über dem Spieler zeichnen ---
+            current_time = pygame.time.get_ticks()
+            time_since_shot = current_time - last_shot_time
+            if time_since_shot < 400:
+                cooldown_remaining = 400 - time_since_shot
+                # Balkenbreite passt sich proportional zur Spielerbreite an
+                bar_width = (cooldown_remaining / 400) * player_object.width
+                # Schwarzer Hintergrund-Rahmen und roter abnehmender Balken
+                pygame.draw.rect(screen, "black",
+                                 (player_object.x_pos, player_object.y_pos - 12, player_object.width, 5))
+                pygame.draw.rect(screen, "red", (player_object.x_pos, player_object.y_pos - 12, bar_width, 5))
+            # Ki Ende, Prompt: Cooldown-Leiste ueber dem Spieler rendern
 
-            # --- Das neue aufgeteilte User Interface (UI) ---
+            # Ki Google Gemini Anfang
+            # Runden-Ende Bedingungen: 15 Sekunden vorbei ODER keine Schüsse & fliegenden Kugeln mehr übrig
+            if frame_counter >= gv.FPS * 15 or (bullets_left == 0 and len(bullets_manager.bullets) == 0):
+                if score > 0:
+                    save_highscore(score)  # Nur speichern, wenn Punkte > 0
+                game_state = "MENU"  # Bei 0 Punkten direkt zurück zum Startbildschirm
+                frame_counter = 0
+            # Ki Ende, Prompt: Spielabbruch bei 0 Punkten am Rundenende einbauen
+
+            # --- User Interface (UI) ---
             font_ui = pygame.font.SysFont("arial", 20)
 
-            # 1. Links oben: Restliche Schüsse
+            # Links oben: Restliche Schüsse
             ammo_text = font_ui.render(f"Schüsse: {bullets_left}", True, "white")
             screen.blit(ammo_text, (10, 10))
 
-            # 2. Mitte oben: Die verbleibende Zeit (wird automatisch zentriert)
+            # Mitte oben: Die verbleibende Zeit
             remaining_time = max(0, 15 - (frame_counter // gv.FPS))
             time_text = font_ui.render(f"Zeit: {remaining_time}s", True, "white")
             time_rect = time_text.get_rect(center=(gv.SCREEN_WIDTH // 2, 20))
             screen.blit(time_text, time_rect)
 
-            # 3. Rechts oben: Die aktuellen Punkte
+            # Rechts oben: Die aktuellen Punkte
             score_text = font_ui.render(f"Punkte: {score}", True, "white")
             score_rect = score_text.get_rect(topright=(gv.SCREEN_WIDTH - 10, 10))
             screen.blit(score_text, score_rect)
 
             frame_counter += 1
-            # Ki Ende, Prompt: 15s Timer und getrenntes UI (Links, Mitte, Rechts) einbauen
 
         # Das Display aktualisieren
         pygame.display.flip()
