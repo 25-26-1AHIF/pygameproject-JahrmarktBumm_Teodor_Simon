@@ -11,8 +11,10 @@ from game.target import Target, Targets
 def load_highscores():
     if os.path.exists("highscores.json"):
         with open("highscores.json", "r") as f:
-            try: return json.load(f)
-            except json.JSONDecodeError: return []
+            try:
+                return json.load(f)
+            except json.JSONDecodeError:
+                return []
     return []
 
 def save_highscore(new_score):
@@ -50,7 +52,7 @@ def draw_menu(screen, title_text):
         screen.blit(score_text, (gv.SCREEN_WIDTH - 240, 120 + i * 30))
 
     return button_rect
-# Ki Ende, Menü mit Highscore-Anzeige erweitert
+# Ki Ende, Prompt: Menü mit Highscore-Anzeige erweitern
 
 
 def main_screen():
@@ -62,6 +64,7 @@ def main_screen():
     game_state = "MENU"
     menu_title = "Jahrmarkt Bumm"
     frame_counter = 0
+    score = 0
 
     bullets_manager = Bullets(screen)
     player_object = Player(screen, bullets_manager)
@@ -70,26 +73,23 @@ def main_screen():
     running = True
     clock = pygame.time.Clock()
 
-    # Lokaler Platzhalter für den Button-Bereich im aktuellen Frame <- KI
+    # Lokaler Platzhalter für den Button-Bereich im aktuellen Frame
     current_button_rect = pygame.Rect(0, 0, 0, 0)
 
-    score = 0
-
     while running:
-
-        # EVENT HANDLING <- teils von KI (Punkte Makiert) und Space Shooter
+        # EVENT HANDLING
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-            # Events im MENÜ <- KI und Space Shooter
+            # Events im MENÜ
             if game_state == "MENU":
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if current_button_rect.collidepoint(event.pos):
                         game_state = "GAME"
                         frame_counter = 0
 
-            # Events im SPIEL <- KI und Space Shooter
+            # Events im SPIEL
             elif game_state == "GAME":
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -110,14 +110,7 @@ def main_screen():
                             bullets_manager.bullets.remove(bullet)
                         if target in targets_manager.targets:
                             targets_manager.targets.remove(target)
-                        # Ki Google Gemini Anfang
-                        if bullet.get_rect().colliderect(target.get_rect()):
-                            if bullet in bullets_manager.bullets:
-                                bullets_manager.bullets.remove(bullet)
-                            if target in targets_manager.targets:
-                                targets_manager.targets.remove(target)
-                                score += 10  # Punkte vergeben!
-                    # Ki Ende, Prompt: Punkte bei Treffer erhöhen
+                            score += 10  # Punkte vergeben!
 
             # Neu zeichnen der Spiel-Grafiken
             screen.fill("darkgray")
@@ -126,24 +119,23 @@ def main_screen():
             targets_manager.update_and_draw(frame_counter)
 
             # Ki Google Gemini Anfang
-            # Timer prüfen (60 Sekunden * 60 FPS = 3600 Frames)
-            if frame_counter >= gv.FPS * 60:
+            # Timer prüfen (Jetzt auf 30 Sekunden geändert!)
+            if frame_counter >= gv.FPS * 30:
                 save_highscore(score)  # Score speichern
                 score = 0  # Reset für nächstes Spiel
                 frame_counter = 0  # Frame-Counter Reset
                 game_state = "MENU"  # Zurück ins Menü
 
-            # Timer & Punkte im Spiel oben links anzeigen
+            # Timer & Punkte im Spiel oben links anzeigen (Auch hier auf 30s angepasst)
             font_ui = pygame.font.SysFont("arial", 20)
-            remaining_time = max(0, 60 - (frame_counter // gv.FPS))
+            remaining_time = max(0, 30 - (frame_counter // gv.FPS))
             ui_text = font_ui.render(f"Zeit: {remaining_time}s | Punkte: {score}", True, "white")
             screen.blit(ui_text, (10, 10))
 
             frame_counter += 1
-            # Ki Ende, 60s Timer-Prüfung und UI-Anzeige einbauen
+            # Ki Ende, Prompt: 30s Timer-Prüfung und UI-Anzeige einbauen
 
-            frame_counter += 1
-
+        # Das Display aktualisieren
         pygame.display.flip()
         clock.tick(gv.FPS)
 
