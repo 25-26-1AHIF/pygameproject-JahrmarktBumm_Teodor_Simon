@@ -17,12 +17,15 @@ def load_highscores():
                 return []
     return []
 
+
 def save_highscore(new_score):
     scores = load_highscores()
     scores.append(new_score)
     scores.sort(reverse=True)
     with open("highscores.json", "w") as f:
-        json.dump(scores[:5], f) # Nur Top 5 speichern
+        json.dump(scores[:5], f)  # Nur Top 5 speichern
+
+
 # Ki Ende, Prompt: Highscore Speicher-Logik hinzufügen
 
 
@@ -52,6 +55,8 @@ def draw_menu(screen, title_text):
         screen.blit(score_text, (gv.SCREEN_WIDTH - 240, 120 + i * 30))
 
     return button_rect
+
+
 # Ki Ende, Prompt: Menü mit Highscore-Anzeige erweitern
 
 
@@ -65,6 +70,11 @@ def main_screen():
     menu_title = "Jahrmarkt Bumm"
     frame_counter = 0
     score = 0
+
+    # Ki Google Gemini Anfang
+    bullets_left = 10  # Begrenzung auf 10 Schuss
+    last_shot_time = 0
+    # Ki Ende, Prompt: Neue Variable für limitierte Munition
 
     bullets_manager = Bullets(screen)
     player_object = Player(screen, bullets_manager)
@@ -88,6 +98,8 @@ def main_screen():
                     if current_button_rect.collidepoint(event.pos):
                         game_state = "GAME"
                         frame_counter = 0
+                        score = 0  # Punkte für neues Spiel zurücksetzen
+                        bullets_left = 10  # Munition für neues Spiel auffüllen
 
             # Events im SPIEL
             elif game_state == "GAME":
@@ -95,8 +107,17 @@ def main_screen():
                     if event.key == pygame.K_ESCAPE:
                         game_state = "MENU"
                         menu_title = "Jahrmarkt Bumm"
+
+                    # Ki Google Gemini Anfang
                     if event.key == pygame.K_SPACE:
-                        player_object.shoot()
+                        current_time = pygame.time.get_ticks()
+                        # Cooldown prüfen (400ms) UND prüfen, ob noch Schüsse übrig sind
+                        if current_time - last_shot_time >= 400:
+                            if bullets_left > 0:
+                                player_object.shoot()
+                                bullets_left -= 1  # Einen Schuss abziehen
+                                last_shot_time = current_time
+                    # Ki Ende, Prompt: Schuss-Limitierung einbauen
 
         if game_state == "MENU":
             current_button_rect = draw_menu(screen, menu_title)
@@ -119,21 +140,32 @@ def main_screen():
             targets_manager.update_and_draw(frame_counter)
 
             # Ki Google Gemini Anfang
-            # Timer prüfen (Jetzt auf 30 Sekunden geändert!)
-            if frame_counter >= gv.FPS * 30:
+            # Timer prüfen (Jetzt auf genau 15 Sekunden eingestellt!)
+            if frame_counter >= gv.FPS * 15:
                 save_highscore(score)  # Score speichern
-                score = 0  # Reset für nächstes Spiel
-                frame_counter = 0  # Frame-Counter Reset
                 game_state = "MENU"  # Zurück ins Menü
+                frame_counter = 0
 
-            # Timer & Punkte im Spiel oben links anzeigen (Auch hier auf 30s angepasst)
+            # --- Das neue aufgeteilte User Interface (UI) ---
             font_ui = pygame.font.SysFont("arial", 20)
-            remaining_time = max(0, 30 - (frame_counter // gv.FPS))
-            ui_text = font_ui.render(f"Zeit: {remaining_time}s | Punkte: {score}", True, "white")
-            screen.blit(ui_text, (10, 10))
+
+            # 1. Links oben: Restliche Schüsse
+            ammo_text = font_ui.render(f"Schüsse: {bullets_left}", True, "white")
+            screen.blit(ammo_text, (10, 10))
+
+            # 2. Mitte oben: Die verbleibende Zeit (wird automatisch zentriert)
+            remaining_time = max(0, 15 - (frame_counter // gv.FPS))
+            time_text = font_ui.render(f"Zeit: {remaining_time}s", True, "white")
+            time_rect = time_text.get_rect(center=(gv.SCREEN_WIDTH // 2, 20))
+            screen.blit(time_text, time_rect)
+
+            # 3. Rechts oben: Die aktuellen Punkte
+            score_text = font_ui.render(f"Punkte: {score}", True, "white")
+            score_rect = score_text.get_rect(topright=(gv.SCREEN_WIDTH - 10, 10))
+            screen.blit(score_text, score_rect)
 
             frame_counter += 1
-            # Ki Ende, Prompt: 30s Timer-Prüfung und UI-Anzeige einbauen
+            # Ki Ende, Prompt: 15s Timer und getrenntes UI (Links, Mitte, Rechts) einbauen
 
         # Das Display aktualisieren
         pygame.display.flip()
