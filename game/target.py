@@ -11,14 +11,15 @@ class Target:
         self.y_pos = 50
         self.direction = 1
         self.speed = 2.5
+        self.image = pygame.image.load("Assets/Target_Sprito.png")
 
     def get_rect(self):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
 
     def update_and_draw(self):
         self.x_pos += self.speed * self.direction
-        pygame.draw.rect(self.screen, "red", self.get_rect())
-
+        #pygame.draw.rect(self.screen, "red", self.get_rect())
+        self.screen.blit(self.image, self.get_rect())
 
 class Targets:
     def __init__(self, screen: pygame.Surface):
