@@ -11,6 +11,7 @@ class Player:
         self.x_pos = gv.SCREEN_WIDTH // 2 - self.width // 2
         self.y_pos = gv.SCREEN_HEIGHT - self.height - 10
         self.bullets = bullets
+        self.image = pygame.image.load("Assets/Player_sprito.png")
 
     def get_rect(self):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
@@ -29,4 +30,5 @@ class Player:
         if keys[pygame.K_d] and self.x_pos < gv.SCREEN_WIDTH - self.width:
             self.x_pos += 2
 
-        pygame.draw.rect(self.screen, "blue", self.get_rect())
+       # pygame.draw.rect(self.screen, "blue", self.get_rect())
+        self.screen.blit(self.image, (self.x_pos, self.y_pos))
