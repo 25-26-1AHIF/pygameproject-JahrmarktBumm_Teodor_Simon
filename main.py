@@ -1,3 +1,4 @@
+# Ki Google Gemini Anfang
 import pygame
 import json
 import os
@@ -7,7 +8,6 @@ from game.bullet import Bullet, Bullets
 from game.target import Target, Targets
 
 
-# Ki Google Gemini Anfang
 def load_highscores():
     if os.path.exists("highscores.json"):
         with open("highscores.json", "r") as f:
@@ -23,170 +23,131 @@ def save_highscore(new_score):
     scores.append(new_score)
     scores.sort(reverse=True)
     with open("highscores.json", "w") as f:
-        json.dump(scores[:5], f)  # Nur Top 5 speichern
+        json.dump(scores[:5], f)
 
 
-# Ki Ende, Hilfe bei Serialisierug
-
-
-# Ki Google Gemini Anfang
 def draw_menu(screen, title_text):
     screen.fill("black")
 
-    # Titel (leicht nach links verschoben für Tabelle)
     font_title = pygame.font.SysFont("arial", 48)
     title_surface = font_title.render(title_text, True, "white")
     screen.blit(title_surface, (50, 100))
 
-    # Start-Button (nach links verschoben)
     font_button = pygame.font.SysFont("arial", 32)
     button_text = font_button.render("Starten", True, "white")
-    button_rect = pygame.Rect(100, 250, 140, 50)
-    pygame.draw.rect(screen, "red", button_rect, 1)
-    screen.blit(button_text, (button_rect.x + 20, button_rect.y + 5))
+    button_rect = pygame.Rect(50, 200, 150, 50)
 
-    # --- Highscore Tabelle auf der rechten Seite ---
-    font_hs = pygame.font.SysFont("arial", 24)
-    screen.blit(font_hs.render("Top 5 Highscores:", True, "yellow"), (gv.SCREEN_WIDTH - 240, 80))
+    pygame.draw.rect(screen, "red", button_rect, 2)
+    screen.blit(button_text, (button_rect.x + 25, button_rect.y + 5))
 
-    scores = load_highscores()
-    for i, score in enumerate(scores):
-        score_text = font_hs.render(f"{i + 1}. {score} Punkte", True, "white")
-        screen.blit(score_text, (gv.SCREEN_WIDTH - 240, 120 + i * 30))
+    font_scores = pygame.font.SysFont("arial", 24)
+    scores_title = font_scores.render("Top 5 Highscores:", True, "yellow")
+    screen.blit(scores_title, (400, 100))
+
+    highscores = load_highscores()
+    for i, s in enumerate(highscores):
+        score_text = font_scores.render(f"{i+1}. {s} Punkte", True, "white")
+        screen.blit(score_text, (400, 140 + i * 30))
 
     return button_rect
-
-
-# Ki Ende, Menü mit Highscore-Anzeige erweitert
 
 
 def main_screen():
     pygame.init()
     screen = pygame.display.set_mode((gv.SCREEN_WIDTH, gv.SCREEN_HEIGHT))
-    pygame.display.set_caption("JahrmarktBumm")
-
-    # Zustände
-    game_state = "MENU"
-    menu_title = "Jahrmarkt Bumm"
-    frame_counter = 0
-    score = 0
-    bullets_left = 10
-    last_shot_time = 0
-
-    bullets_manager = Bullets(screen)
-    player_object = Player(screen, bullets_manager)
-    targets_manager = Targets(screen)
-
-    running = True
     clock = pygame.time.Clock()
 
-    # Lokaler Platzhalter für den Button-Bereich im aktuellen Frame
-    current_button_rect = pygame.Rect(0, 0, 0, 0)
+    game_state = "MENU"
+    menu_title = "Jahrmarkt Bumm"
 
+    bullets_manager = Bullets(screen)
+    player = Player(screen, bullets_manager)
+    targets_manager = Targets(screen)
+
+    score = 0
+    bullets_left = 10
+    frame_counter = 0
+
+    # KI: Google Gemini Hilfe beim Bild
+    background_image = pygame.image.load("Assets/background.png").convert()
+    background_image = pygame.transform.scale(background_image, (gv.SCREEN_WIDTH, gv.SCREEN_HEIGHT))
+
+    running = True
     while running:
-        # EVENT HANDLING
+        clock.tick(gv.FPS)
+
+        button_rect = None
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-            # Events im MENÜ
             if game_state == "MENU":
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if current_button_rect.collidepoint(event.pos):
+                    if button_rect and button_rect.collidepoint(event.pos):
                         game_state = "GAME"
+                        score = 0
+                        bullets_left = 10
                         frame_counter = 0
-                        score = 0  # Punkte zurücksetzen
-                        bullets_left = 10  # Munition auffüllen
-                        last_shot_time = 0  # Cooldown zurücksetzen
+                        bullets_manager.bullets.clear()
+                        targets_manager.targets.clear()
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
-
-            # Events im SPIEL
             elif game_state == "GAME":
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         game_state = "MENU"
                         menu_title = "Jahrmarkt Bumm"
-
-                    if event.key == pygame.K_SPACE:
-                        current_time = pygame.time.get_ticks()
-                        if current_time - last_shot_time >= 400:
-                            if bullets_left > 0:
-                                player_object.shoot()
-                                bullets_left -= 1
-                                last_shot_time = current_time
+                    elif event.key == pygame.K_SPACE:
+                        if bullets_left > 0:
+                            player.shoot()
+                            bullets_left -= 1
 
         if game_state == "MENU":
-            current_button_rect = draw_menu(screen, menu_title)
+            button_rect = draw_menu(screen, menu_title)
 
         elif game_state == "GAME":
-            # Kollisionsabfrage
-            for bullet in bullets_manager.bullets[:]:
-                for target in targets_manager.targets[:]:
-                    if bullet.get_rect().colliderect(target.get_rect()):
-                        if bullet in bullets_manager.bullets:
-                            bullets_manager.bullets.remove(bullet)
-                        if target in targets_manager.targets:
-                            targets_manager.targets.remove(target)
-                            score += 10
+            # KI Ende
+            # HIER GEÄNDERT: Statt screen.fill((50, 50, 50)) Bild
+            screen.blit(background_image, (0, 0))
+            frame_counter += 1
 
-            # Neu zeichnen der Spiel-Grafiken
-            screen.fill("darkgray")
-            player_object.update_and_draw(frame_counter)
-            bullets_manager.update_and_draw()
+            player.update_and_draw(frame_counter)
             targets_manager.update_and_draw(frame_counter)
+            bullets_manager.update_and_draw()
 
-            # Ki Google Gemini Anfang
-            # Visuelle Cooldown-Leiste über dem Spieler zeichnen
-            current_time = pygame.time.get_ticks()
-            time_since_shot = current_time - last_shot_time
-            if time_since_shot < 400:
-                cooldown_remaining = 400 - time_since_shot
-                # Balkenbreite passt sich proportional zur Spielerbreite an
-                bar_width = (cooldown_remaining / 400) * player_object.width
-                # Schwarzer Hintergrund-Rahmen und roter abnehmender Balken
-                pygame.draw.rect(screen, "black",
-                                 (player_object.x_pos, player_object.y_pos - 12, player_object.width, 5))
-                pygame.draw.rect(screen, "red", (player_object.x_pos, player_object.y_pos - 12, bar_width, 5))
-            # Ki Ende, Cooldown-Leiste ueber dem Spieler rendern
+            for b in bullets_manager.bullets[:]:
+                for t in targets_manager.targets[:]:
+                    if b.get_rect().colliderect(t.get_rect()):
+                        score += 10
+                        bullets_manager.bullets.remove(b)
+                        targets_manager.targets.remove(t)
+                        break
 
-            # Ki Google Gemini Anfang
-            # Runden-Ende Bedingungen: 15 Sekunden vorbei ODER keine Schüsse & fliegenden Kugeln mehr übrig
             if frame_counter >= gv.FPS * 15 or (bullets_left == 0 and len(bullets_manager.bullets) == 0):
                 if score > 0:
-                    save_highscore(score)  # Nur speichern, wenn Punkte > 0
-                game_state = "MENU"  # Bei 0 Punkten direkt zurück zum Startbildschirm
+                    save_highscore(score)
+                game_state = "MENU"
                 frame_counter = 0
-            # Ki Ende, Kleine Hilfe bei Beenden
 
-            # UI
             font_ui = pygame.font.SysFont("arial", 20)
 
-            # Restliche Schüsse
             ammo_text = font_ui.render(f"Schüsse: {bullets_left}", True, "white")
             screen.blit(ammo_text, (10, 10))
 
-            # Die verbleibende Zeit
             remaining_time = max(0, 15 - (frame_counter // gv.FPS))
             time_text = font_ui.render(f"Zeit: {remaining_time}s", True, "white")
             time_rect = time_text.get_rect(center=(gv.SCREEN_WIDTH // 2, 20))
             screen.blit(time_text, time_rect)
 
-            # Die aktuellen Punkte
             score_text = font_ui.render(f"Punkte: {score}", True, "white")
             score_rect = score_text.get_rect(topright=(gv.SCREEN_WIDTH - 10, 10))
             screen.blit(score_text, score_rect)
 
-            frame_counter += 1
-
         pygame.display.flip()
-        clock.tick(gv.FPS)
 
     pygame.quit()
 
 
 if __name__ == "__main__":
     main_screen()
-
+# Ki Ende, Prompt: Kannst du mir den Code ändern dass ich den dunkelgrauen hintergrund im game zu einem bild ändern kann
