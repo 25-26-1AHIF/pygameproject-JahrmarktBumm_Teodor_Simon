@@ -1,8 +1,7 @@
-# Ki Google Gemini Anfang
 import pygame
 from game_variables.GameVariables import GameVariables as gv
 from game.bullet import Bullet, Bullets
-from game.sprite import Sprite  # Importiert die neue Sprite-Klasse
+from game.sprite import Sprite # <- KI Hilfe bei Sprite
 
 
 class Player:
@@ -37,4 +36,3 @@ class Player:
 
         # Zeichnet den Spieler animiert anstatt des statischen Blits
         self.animation.draw(self.screen, self.x_pos, self.y_pos, self.width, self.height, frame_counter)
-# Ki Ende, Prompt: das schulbeispiel sag mir was du jetzt machst

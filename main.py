@@ -1,4 +1,3 @@
-# Ki Google Gemini Anfang
 import pygame
 import json
 import os
@@ -52,6 +51,7 @@ def draw_menu(screen, title_text):
     return button_rect
 
 
+# Ki Google Gemini Anfang
 def main_screen():
     pygame.init()
     screen = pygame.display.set_mode((gv.SCREEN_WIDTH, gv.SCREEN_HEIGHT))
@@ -68,15 +68,19 @@ def main_screen():
     bullets_left = 10
     frame_counter = 0
 
-    # KI: Google Gemini Hilfe beim Bild
     background_image = pygame.image.load("Assets/background.png").convert()
     background_image = pygame.transform.scale(background_image, (gv.SCREEN_WIDTH, gv.SCREEN_HEIGHT))
+
+    # HIER GEÄNDERT: button_rect VOR der Schleife definieren, damit es nie None ist!
+    button_rect = pygame.Rect(0, 0, 0, 0)
 
     running = True
     while running:
         clock.tick(gv.FPS)
 
-        button_rect = None
+        # Wenn wir im Menü sind, zeichnen wir es und holen uns die echten Button-Koordinaten
+        if game_state == "MENU":
+            button_rect = draw_menu(screen, menu_title)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -84,7 +88,8 @@ def main_screen():
 
             if game_state == "MENU":
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_rect and button_rect.collidepoint(event.pos):
+                    # Das funktioniert jetzt fehlerfrei, da button_rect immer existiert
+                    if button_rect.collidepoint(event.pos):
                         game_state = "GAME"
                         score = 0
                         bullets_left = 10
@@ -102,12 +107,7 @@ def main_screen():
                             player.shoot()
                             bullets_left -= 1
 
-        if game_state == "MENU":
-            button_rect = draw_menu(screen, menu_title)
-
-        elif game_state == "GAME":
-            # KI Ende
-            # HIER GEÄNDERT: Statt screen.fill((50, 50, 50)) Bild
+        if game_state == "GAME":
             screen.blit(background_image, (0, 0))
             frame_counter += 1
 
@@ -130,7 +130,6 @@ def main_screen():
                 frame_counter = 0
 
             font_ui = pygame.font.SysFont("arial", 20)
-
             ammo_text = font_ui.render(f"Schüsse: {bullets_left}", True, "white")
             screen.blit(ammo_text, (10, 10))
 
@@ -146,8 +145,8 @@ def main_screen():
         pygame.display.flip()
 
     pygame.quit()
+# Ki Ende, Prompt: [Image_9d1d27.png / Fehlermeldung]
 
 
 if __name__ == "__main__":
     main_screen()
-# Ki Ende, Prompt: Kannst du mir den Code ändern dass ich den dunkelgrauen hintergrund im game zu einem bild ändern kann

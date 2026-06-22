@@ -23,4 +23,4 @@ class Sprite:
         current_image = self.images[(frame_counter // self.animationspeed) % self.image_count]
         scaled_image = pygame.transform.scale(current_image, (int(width), int(height)))
         screen.blit(scaled_image, dest=(xpos, ypos))
-# Ki Ende, Prompt: das schulbeispiel sag mir was du jetzt machst
+# Ki Ende, Sprite nicht ganz verstanden
