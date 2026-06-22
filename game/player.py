@@ -1,6 +1,8 @@
+# Ki Google Gemini Anfang
 import pygame
 from game_variables.GameVariables import GameVariables as gv
 from game.bullet import Bullet, Bullets
+from game.sprite import Sprite  # Importiert die neue Sprite-Klasse
 
 
 class Player:
@@ -11,7 +13,12 @@ class Player:
         self.x_pos = gv.SCREEN_WIDTH // 2 - self.width // 2
         self.y_pos = gv.SCREEN_HEIGHT - self.height - 10
         self.bullets = bullets
-        self.image = pygame.image.load("Assets/Player_sprito.png")
+
+        # Hier wird die Animation initialisiert (Beispielhaft mit 6 Bildern und 48x48 Pixeln je Frame)
+        # HINWEIS: Passt image_count und die Rect-Größe (48, 48) an euer Player_sprito.png an!
+        self.animation = Sprite(filepath="Assets/Player_sprito.png", animationspeed=6, image_count=6,
+                                image_rect=pygame.Rect(0, 0, 48, 48))
+        self.animation.load_spritesheet()
 
     def get_rect(self):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
@@ -19,8 +26,6 @@ class Player:
     def shoot(self):
         mx = self.x_pos + self.width / 2 - gv.BULLET_SIZE / 2
         my = self.y_pos - gv.BULLET_SIZE
-
-        # Geschwindigkeit auf -7 erhöht, damit die Kugeln schneller fliegen
         self.bullets.add_bullet(Bullet(self.screen, mx, my, 0, -7))
 
     def update_and_draw(self, frame_counter: int):
@@ -30,5 +35,6 @@ class Player:
         if keys[pygame.K_d] and self.x_pos < gv.SCREEN_WIDTH - self.width:
             self.x_pos += 2
 
-       # pygame.draw.rect(self.screen, "blue", self.get_rect())
-        self.screen.blit(self.image, (self.x_pos, self.y_pos))
+        # Zeichnet den Spieler animiert anstatt des statischen Blits
+        self.animation.draw(self.screen, self.x_pos, self.y_pos, self.width, self.height, frame_counter)
+# Ki Ende, Prompt: das schulbeispiel sag mir was du jetzt machst
